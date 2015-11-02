@@ -1,7 +1,9 @@
 (function (App) {
     'use strict';
     var memoize = require('memoizee');
-    var cache = {};
+    var fs = require ('fs');
+
+    var cache = App.Providers._cache = {};
 
     var Provider = function () {
         var memopts = {
@@ -38,22 +40,23 @@
     function getProvider(name) {
         if (!name) {
             /* XXX(xaiki): this is for debug purposes, will it bite us later ? */
-            win.error('dumping provider cache');
+            console.error('dumping provider cache');
             return cache;
         }
 
         if (cache[name]) {
-            win.info('Returning cached provider', name);
+            console.info('Returning cached provider', name, cache[name]);
             return cache[name];
         }
 
         var provider = App.Providers[name];
         if (!provider) {
-            win.error('couldn\'t find provider', name);
+            console.error('couldn\'t find provider', name);
             return null;
         }
 
-        win.info('Spawning new provider', name);
+        /* this should never be hit as we spawn providers on load */
+        console.info('Spawning new provider', name);
         cache[name] = new provider();
         //HACK(xaiki): set the provider name in the returned object.
         cache[name].name = name;
@@ -70,5 +73,4 @@
     App.Providers.get = getProvider;
     App.Providers.delete = delProvider;
     App.Providers.Generic = Provider;
-
 })(window.App);

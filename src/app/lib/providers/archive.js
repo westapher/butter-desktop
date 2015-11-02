@@ -1,10 +1,11 @@
-(function (App) {
-    'use strict';
+
     var querystring = require('querystring');
     var request = require('request');
     var Q = require('q');
 
-    var Archive = function () {};
+    var Archive = function () {
+        return this;
+    };
 
     var baseURL = 'https://archive.org/';
     var URL = baseURL + 'advancedsearch.php';
@@ -51,9 +52,11 @@
             params.page = filters.page;
         }
 
+        /*
         if (Settings.movies_quality !== 'all') { //XXX(xaiki): not supported
             params.quality = Settings.movies_quality;
         }
+        */
 
         return deferRequest(URL + '?sort[]=' + sort, params, true)
             .then(function (data) {
@@ -242,6 +245,4 @@
         return queryDetails(torrent_id, old_data);
     };
 
-    App.Providers.Archive = Archive;
-
-})(window.App);
+module.exports = Archive;

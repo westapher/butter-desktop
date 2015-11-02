@@ -1,6 +1,8 @@
 (function (App) {
     'use strict';
 
+    var inherits = require('util').inherits;
+
     var URL = false;
     var TVApi = function () {
         try {
